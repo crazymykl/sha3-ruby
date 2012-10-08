@@ -62,7 +62,7 @@ LIBRUBYARG_STATIC = -Wl,-R -Wl,$(libdir) -L$(libdir) -l$(RUBY_SO_NAME)-static
 OUTFLAG = -o 
 COUTFLAG = -o 
 
-RUBY_EXTCONF_H = 
+RUBY_EXTCONF_H = extconf.h
 cflags   =  $(optflags) $(debugflags) $(warnflags)
 optflags = -O3
 debugflags = -ggdb
@@ -70,7 +70,7 @@ warnflags = -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-m
 CFLAGS   = -fPIC -O2 -march=native -pipe -fno-strict-aliasing -fPIC $(ARCH_FLAG)
 INCFLAGS = -I. -I$(arch_hdrdir) -I$(hdrdir)/ruby/backward -I$(hdrdir) -I$(srcdir)
 DEFS     = 
-CPPFLAGS =   $(DEFS) $(cppflags)
+CPPFLAGS = -DRUBY_EXTCONF_H=\"$(RUBY_EXTCONF_H)\"  $(DEFS) $(cppflags)
 CXXFLAGS = $(CFLAGS) -O2 -pipe -fno-strict-aliasing
 ldflags  = -L. -Wl,-O1 -Wl,--sort-common -Wl,--as-needed -rdynamic -Wl,-export-dynamic -Wl,--no-undefined
 dldflags = 
@@ -115,9 +115,9 @@ extout_prefix =
 target_prefix = 
 LOCAL_LIBS = 
 LIBS = $(LIBRUBYARG_SHARED)  -lpthread -lrt -ldl -lcrypt -lm   -lc
-SRCS = sha3-ruby.c
-OBJS = sha3-ruby.o
-TARGET = sha3-ruby
+SRCS = sha3.c KeccakNISTInterface.c KeccakSponge.c KeccakF-1600-reference.c displayIntermediateValues.c
+OBJS = sha3.o KeccakReferenceAndOptimized/Sources/KeccakNISTInterface.o KeccakReferenceAndOptimized/Sources/KeccakSponge.o KeccakReferenceAndOptimized/Sources/KeccakF-1600-reference.o KeccakReferenceAndOptimized/Sources/displayIntermediateValues.o
+TARGET = sha3
 DLLIB = $(TARGET).so
 EXTSTATIC = 
 STATIC_LIB = 
@@ -164,7 +164,7 @@ install-rb-default: pre-install-rb-default
 pre-install-rb: Makefile
 pre-install-rb-default: Makefile
 pre-install-rb-default:
-	$(ECHO) installing default sha3-ruby libraries
+	$(ECHO) installing default sha3 libraries
 
 site-install: site-install-so site-install-rb
 site-install-so: install-so
@@ -207,4 +207,34 @@ $(DLLIB): $(OBJS) Makefile
 
 
 
-$(OBJS): $(hdrdir)/ruby.h $(hdrdir)/ruby/defines.h $(arch_hdrdir)/ruby/config.h
+###
+$(OBJS): $(RUBY_EXTCONF_H)
+
+sha3.o: sha3.c \
+ KeccakReferenceAndOptimized/Sources/KeccakNISTInterface.c \
+ KeccakReferenceAndOptimized/Sources/KeccakSponge.c \
+ KeccakReferenceAndOptimized/Sources/KeccakF-1600-reference.c \
+ KeccakReferenceAndOptimized/Sources/displayIntermediateValues.c
+KeccakNISTInterface.o: \
+ KeccakReferenceAndOptimized/Sources/KeccakNISTInterface.c \
+ KeccakReferenceAndOptimized/Sources/KeccakNISTInterface.h \
+ KeccakReferenceAndOptimized/Sources/KeccakSponge.h \
+ KeccakReferenceAndOptimized/Sources/KeccakF-1600-interface.h \
+ KeccakReferenceAndOptimized/Sources/KeccakF-1600-int-set.h
+KeccakSponge.o: KeccakReferenceAndOptimized/Sources/KeccakSponge.c \
+ KeccakReferenceAndOptimized/Sources/KeccakSponge.h \
+ KeccakReferenceAndOptimized/Sources/KeccakF-1600-interface.h \
+ KeccakReferenceAndOptimized/Sources/KeccakF-1600-int-set.h
+KeccakF-1600-reference.o: \
+ KeccakReferenceAndOptimized/Sources/KeccakF-1600-reference.c \
+ KeccakReferenceAndOptimized/Sources/brg_endian.h \
+ KeccakReferenceAndOptimized/Sources/displayIntermediateValues.h \
+ KeccakReferenceAndOptimized/Sources/KeccakNISTInterface.h \
+ KeccakReferenceAndOptimized/Sources/KeccakSponge.h \
+ KeccakReferenceAndOptimized/Sources/KeccakF-1600-interface.h \
+ KeccakReferenceAndOptimized/Sources/KeccakF-1600-int-set.h
+displayIntermediateValues.o: \
+ KeccakReferenceAndOptimized/Sources/displayIntermediateValues.c \
+ KeccakReferenceAndOptimized/Sources/displayIntermediateValues.h \
+ KeccakReferenceAndOptimized/Sources/KeccakNISTInterface.h \
+ KeccakReferenceAndOptimized/Sources/KeccakSponge.h

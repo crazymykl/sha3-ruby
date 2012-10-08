@@ -2,4 +2,6 @@ require "bundler/gem_tasks"
 
 require 'rake/extensiontask'
 
-Rake::ExtensionTask.new('sha3')
+GEMSPEC = eval(File.read(File.expand_path("../sha3-ruby.gemspec", __FILE__)))
+
+Rake::ExtensionTask.new('sha3', GEMSPEC)

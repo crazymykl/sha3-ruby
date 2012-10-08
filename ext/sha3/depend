@@ -1,0 +1,28 @@
+sha3.o: sha3.c \
+ KeccakReferenceAndOptimized/Sources/KeccakNISTInterface.c \
+ KeccakReferenceAndOptimized/Sources/KeccakSponge.c \
+ KeccakReferenceAndOptimized/Sources/KeccakF-1600-reference.c \
+ KeccakReferenceAndOptimized/Sources/displayIntermediateValues.c
+KeccakNISTInterface.o: \
+ KeccakReferenceAndOptimized/Sources/KeccakNISTInterface.c \
+ KeccakReferenceAndOptimized/Sources/KeccakNISTInterface.h \
+ KeccakReferenceAndOptimized/Sources/KeccakSponge.h \
+ KeccakReferenceAndOptimized/Sources/KeccakF-1600-interface.h \
+ KeccakReferenceAndOptimized/Sources/KeccakF-1600-int-set.h
+KeccakSponge.o: KeccakReferenceAndOptimized/Sources/KeccakSponge.c \
+ KeccakReferenceAndOptimized/Sources/KeccakSponge.h \
+ KeccakReferenceAndOptimized/Sources/KeccakF-1600-interface.h \
+ KeccakReferenceAndOptimized/Sources/KeccakF-1600-int-set.h
+KeccakF-1600-reference.o: \
+ KeccakReferenceAndOptimized/Sources/KeccakF-1600-reference.c \
+ KeccakReferenceAndOptimized/Sources/brg_endian.h \
+ KeccakReferenceAndOptimized/Sources/displayIntermediateValues.h \
+ KeccakReferenceAndOptimized/Sources/KeccakNISTInterface.h \
+ KeccakReferenceAndOptimized/Sources/KeccakSponge.h \
+ KeccakReferenceAndOptimized/Sources/KeccakF-1600-interface.h \
+ KeccakReferenceAndOptimized/Sources/KeccakF-1600-int-set.h
+displayIntermediateValues.o: \
+ KeccakReferenceAndOptimized/Sources/displayIntermediateValues.c \
+ KeccakReferenceAndOptimized/Sources/displayIntermediateValues.h \
+ KeccakReferenceAndOptimized/Sources/KeccakNISTInterface.h \
+ KeccakReferenceAndOptimized/Sources/KeccakSponge.h

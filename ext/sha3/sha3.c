@@ -1,12 +1,20 @@
 #include "ruby.h"
-#include <stdio.h>
+#include <KeccakReferenceAndOptimized/Sources/KeccakNISTInterface.h>
 
 static VALUE mSha3;
 static VALUE cSha3Engine;
 
-static VALUE sha3_init(VALUE self, VALUE key, VALUE setting) {
-  printf("foo!\n");
-  return Qnil;
+static VALUE sha3_init(VALUE self, VALUE bitlength) {
+  
+  VALUE state;
+  hashState *hs;
+  
+  hs = malloc(sizeof(hashState));
+  Init(hs, INT2FIX(bitlength));
+  state = Data_Make_Struct(self, hashState, 0, free, hs);
+  free(hs);
+  
+  return state;
 }
 
 static VALUE sha3_update(VALUE self, VALUE key, VALUE setting) {
